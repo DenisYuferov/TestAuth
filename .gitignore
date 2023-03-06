@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# Directories
+.git/
+.vs/
+**/bin
+**/obj

@@ -1,0 +1,58 @@
+﻿{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:26412",
+      "sslPort": 44356
+    }
+  },
+  "profiles": {
+    "http": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:3001",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "https": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:4001",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        //
+        "Jwt__SecurityKey": "VeryVerySecuredKey!Don`tTellAnyone!!",
+        "Jwt__Issuer": "TestAuth.WebApi",
+        "Jwt__Audience": "TestApps",
+        "Jwt__AccessTokenExpires": "00:30:00",
+        "Jwt__RefreshTokenExpires": "08:00:00",
+        //
+        "Database__Connection": "Host=localhost;Port=5432;Database=TestAuth;Username=postgres;Password=postgres",
+        "Database__SeedUsers__0__Name": "IvanovIvan",
+        "Database__SeedUsers__0__Email": "ivanov.ivan@test.domain",
+        "Database__SeedUsers__0__Password": "Admin_1234",
+        "Database__SeedUsers__0__Roles__0": "admin",
+        "Database__SeedUsers__0__Roles__1": "user",
+        "Database__SeedUsers__1__Name": "PetrovPetr",
+        "Database__SeedUsers__1__Email": "petrov.petr@test.domain",
+        "Database__SeedUsers__1__Password": "User_1234",
+        "Database__SeedUsers__1__Roles__0": "user"
+      }
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
