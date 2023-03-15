@@ -1,9 +1,13 @@
-﻿using MediatR;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using TestAuth.Domain.Model.Commands.Tokens;
+
+using MediatR;
+
+using Microsoft.Extensions.Logging;
+
 using TestAuth.Domain.Abstraction.Providers;
 using TestAuth.Domain.Abstraction.UnitOfWorks;
+using TestAuth.Domain.Model.Commands.Tokens;
 using TestAuth.Domain.Model.Dtos.Tokens;
 
 namespace TestAuth.Domain.Handlers.Tokens
@@ -12,13 +16,16 @@ namespace TestAuth.Domain.Handlers.Tokens
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IJwtProvider _jwtGenerator;
+        private readonly ILogger _logger;
 
         public ObtainTokenCommandHandler(
             IUnitOfWork unitOfWork,
-            IJwtProvider jwtGenerator)
+            IJwtProvider jwtGenerator,
+            ILogger<ObtainTokenCommandHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _jwtGenerator = jwtGenerator ?? throw new ArgumentNullException(nameof(jwtGenerator));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
         public async Task<ObtainTokenDto> Handle(ObtainTokenCommand request, CancellationToken cancellation)
         {
@@ -31,7 +38,6 @@ namespace TestAuth.Domain.Handlers.Tokens
             var pwdCheck = await _unitOfWork.SignInManager.CheckPasswordSignInAsync(user, request.Password, false);
             if (!pwdCheck.Succeeded)
             {
-                
                 throw new Exception($"The password in not correct fo user with e-mail {request.Email}");
             }
 

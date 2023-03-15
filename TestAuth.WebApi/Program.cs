@@ -1,5 +1,8 @@
+using Microsoft.Extensions.DependencyInjection.Extensions;
+
 using TestAuth.Domain;
 using TestAuth.Infrastructure;
+using TestAuth.Infrastructure.Loggers;
 
 namespace TestAuth.WebApi
 {
@@ -8,6 +11,9 @@ namespace TestAuth.WebApi
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Logging.ClearProviders();
+            builder.Logging.Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider, JsonLoggerProvider>());
 
             builder.Services.AddTestAuthInfrastructure(builder.Configuration);
             builder.Services.AddTestAuthDomain();
@@ -22,8 +28,8 @@ namespace TestAuth.WebApi
             builder.Services.AddHealthChecks();
 
             var app = builder.Build();
-
-            app.Services.UseTestAuthInfrastructure();
+            
+            app.UseTestAuthInfrastructure();
 
             if (app.Environment.IsDevelopment())
             {

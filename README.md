@@ -8,4 +8,6 @@
   - IdentityServer
 - MessageQueues:
   - ...
-  - ...</pre>
+  - ...
+- Logging:
+  - JsonLogger</pre>

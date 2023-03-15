@@ -1,6 +1,8 @@
 ﻿using MediatR;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using TestAuth.Domain.Model.Commands.Tokens;
 
 namespace Tion.Map.Authorization.WebApi.Controllers
@@ -36,7 +38,7 @@ namespace Tion.Map.Authorization.WebApi.Controllers
         [HttpPost("refresh")]
         public async Task<ActionResult> RefreshAsync(RefreshTokenCommand command, CancellationToken cancellation)
         {
-            var result = await _sender.Send(command, HttpContext.RequestAborted);
+            var result = await _sender.Send(command, cancellation);
 
             return Ok(result);
         }

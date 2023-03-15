@@ -1,9 +1,11 @@
-﻿using MediatR;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using TestAuth.Domain.Model.Commands.Tokens;
+
+using MediatR;
+
 using TestAuth.Domain.Abstraction.Providers;
 using TestAuth.Domain.Abstraction.UnitOfWorks;
+using TestAuth.Domain.Model.Commands.Tokens;
 using TestAuth.Domain.Model.Dtos.Tokens;
 
 namespace TestAuth.Domain.Handlers.Tokens
