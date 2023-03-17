@@ -11,7 +11,7 @@ using Newtonsoft.Json.Serialization;
 
 using TestAuth.Domain.Model.Exceptions;
 
-namespace Tion.Map.AspNetCore.Exceptions
+namespace TestAuth.Infrastructure.Middlewares
 {
     public class ExceptionMiddleware
     {
@@ -77,7 +77,7 @@ namespace Tion.Map.AspNetCore.Exceptions
                 await WriteResponse(httpContext, ueEx, ProblemDetailTypes["6.5.4"], StatusCodes.Status422UnprocessableEntity);
             }
             else if (exception is AppException appEx)
-            {                
+            {
                 _logger.LogError(appEx, appEx.Message);
                 await WriteResponse(httpContext, appEx, ProblemDetailTypes["6.6.1"], StatusCodes.Status500InternalServerError);
             }

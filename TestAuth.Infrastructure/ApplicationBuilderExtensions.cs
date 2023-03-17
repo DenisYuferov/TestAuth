@@ -6,9 +6,8 @@ using Microsoft.Extensions.Options;
 using TestAuth.Domain.Abstraction.UnitOfWorks;
 using TestAuth.Domain.Model.Options;
 using TestAuth.Infrastructure.DbContexts;
+using TestAuth.Infrastructure.Middlewares;
 using TestAuth.Infrastructure.Seeds;
-
-using Tion.Map.AspNetCore.Exceptions;
 
 namespace TestAuth.Infrastructure
 {

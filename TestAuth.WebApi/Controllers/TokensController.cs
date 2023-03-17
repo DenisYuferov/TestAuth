@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using TestAuth.Domain.Model.Commands.Tokens;
 
-namespace Tion.Map.Authorization.WebApi.Controllers
+namespace TestAuth.WebApi.Controllers
 {
     [Authorize]
     [ApiController]
@@ -30,7 +30,7 @@ namespace Tion.Map.Authorization.WebApi.Controllers
         public async Task<ActionResult> ObtainAsync(ObtainTokenCommand command, CancellationToken cancellation)
         {
             var result = await _sender.Send(command, cancellation);
-            
+
             return Ok(result);
         }
 

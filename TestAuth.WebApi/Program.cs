@@ -21,14 +21,14 @@ namespace TestAuth.WebApi
             builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
             builder.Services.AddControllers();
-            
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwagger();
 
             builder.Services.AddHealthChecks();
 
             var app = builder.Build();
-            
+
             app.UseTestAuthInfrastructure();
 
             if (app.Environment.IsDevelopment())
