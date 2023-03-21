@@ -2,7 +2,6 @@
 
 using MediatR;
 
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.JsonWebTokens;
 
 using SharedCore.Domain.Abstraction.Providers;
@@ -13,22 +12,19 @@ using TestAuth.Domain.Model.CQRS.Dtos.Tokens;
 
 namespace TestAuth.Domain.Handlers.Tokens
 {
-    public class ObtainTokenCommandHandler : IRequestHandler<ObtainTokenCommand, ObtainTokenDto>
+    public class RenewTokenCommandHandler : IRequestHandler<RenewTokenCommand, RenewTokenDto>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IJwtProvider _jwtGenerator;
-        private readonly ILogger _logger;
 
-        public ObtainTokenCommandHandler(
+        public RenewTokenCommandHandler(
             IUnitOfWork unitOfWork,
-            IJwtProvider jwtGenerator,
-            ILogger<ObtainTokenCommandHandler> logger)
+            IJwtProvider jwtGenerator)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _jwtGenerator = jwtGenerator ?? throw new ArgumentNullException(nameof(jwtGenerator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
-        public async Task<ObtainTokenDto> Handle(ObtainTokenCommand request, CancellationToken cancellation)
+        public async Task<RenewTokenDto> Handle(RenewTokenCommand request, CancellationToken cancellation)
         {
             var user = await _unitOfWork.UserManager.FindByEmailAsync(request.Email!);
             if (user == null)
@@ -36,13 +32,8 @@ namespace TestAuth.Domain.Handlers.Tokens
                 throw new Exception($"The user has not been found with e-mail {request.Email}");
             }
 
-            var pwdCheck = await _unitOfWork.SignInManager.CheckPasswordSignInAsync(user, request.Password, false);
-            if (!pwdCheck.Succeeded)
-            {
-                throw new Exception($"The password in not correct for user with e-mail {request.Email}");
-            }
-
             // TODO: Add token cache check
+            // TODO: Validate if refresh token expired
 
             var claims = new List<Claim> {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
@@ -57,7 +48,7 @@ namespace TestAuth.Domain.Handlers.Tokens
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
-            var obtainTokenDto = new ObtainTokenDto
+            var renewTokenDto = new RenewTokenDto
             {
                 AccessToken = _jwtGenerator.CreateAccessToken(claims),
                 RefreshToken = _jwtGenerator.CreateRefreshToken()
@@ -65,7 +56,7 @@ namespace TestAuth.Domain.Handlers.Tokens
 
             // TODO: Store token to cache
 
-            return obtainTokenDto;
+            return renewTokenDto;
         }
     }
 }

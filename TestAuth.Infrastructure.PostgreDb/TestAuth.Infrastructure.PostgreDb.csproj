@@ -5,18 +5,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
+  
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-
+  
   <ItemGroup>
-    <PackageReference Include="SharedCore.Infrastructure" Version="1.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.4" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.3" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\TestAuth.Domain.Abstraction\TestAuth.Domain.Abstraction.csproj" />
-    <ProjectReference Include="..\TestAuth.Infrastructure.PostgreDb\TestAuth.Infrastructure.PostgreDb.csproj" />
   </ItemGroup>
 
 </Project>

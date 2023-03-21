@@ -2,8 +2,7 @@
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-using TestAuth.Domain.Model.Commands.Tokens;
+using TestAuth.Domain.Model.CQRS.Commands.Tokens;
 
 namespace TestAuth.WebApi.Controllers
 {
@@ -35,8 +34,8 @@ namespace TestAuth.WebApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("refresh")]
-        public async Task<ActionResult> RefreshAsync(RefreshTokenCommand command, CancellationToken cancellation)
+        [HttpPost("renew")]
+        public async Task<ActionResult> RenewAsync(RenewTokenCommand command, CancellationToken cancellation)
         {
             var result = await _sender.Send(command, cancellation);
 

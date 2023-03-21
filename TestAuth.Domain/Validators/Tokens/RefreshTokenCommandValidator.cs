@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using TestAuth.Domain.Model.Commands.Tokens;
+using TestAuth.Domain.Model.CQRS.Commands.Tokens;
 
 namespace TestAuth.Domain.Validators.Tokens
 {
-    public class RefreshTokenCommandValidator : AbstractValidator<RefreshTokenCommand>
+    public class RefreshTokenCommandValidator : AbstractValidator<RenewTokenCommand>
     {
         public RefreshTokenCommandValidator()
         {
