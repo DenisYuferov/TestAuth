@@ -20,7 +20,7 @@ namespace TestAuth.Infrastructure.PostgreDb
                 context?.Database.Migrate();
 
                 var unitOfWork = serviceScope.ServiceProvider.GetService<IUnitOfWork>();
-                var options = serviceScope.ServiceProvider.GetService<IOptions<DatabaseOptions>>();
+                var options = serviceScope.ServiceProvider.GetService<IOptions<PostgreDbOptions>>();
 
                 Seed.AddData(unitOfWork, options?.Value);
             }

@@ -1,8 +1,4 @@
-﻿using System.Security.Claims;
-
-using MediatR;
-
-using Microsoft.IdentityModel.JsonWebTokens;
+﻿using MediatR;
 
 using SharedCore.Domain.Abstraction.Providers;
 
@@ -15,14 +11,20 @@ namespace TestAuth.Domain.Handlers.Tokens
     public class RenewTokenCommandHandler : IRequestHandler<RenewTokenCommand, RenewTokenDto>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IJwtProvider _jwtGenerator;
+        private readonly IIdentityUserProvider _identityUserProvider;
+        private readonly IRedisCacheProvider _cache;
+        private readonly IJwtProvider _jwtProvider;
 
         public RenewTokenCommandHandler(
             IUnitOfWork unitOfWork,
-            IJwtProvider jwtGenerator)
+            IIdentityUserProvider identityUserProvider,
+            IRedisCacheProvider cache,
+            IJwtProvider jwtProvider)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _jwtGenerator = jwtGenerator ?? throw new ArgumentNullException(nameof(jwtGenerator));
+            _identityUserProvider = identityUserProvider ?? throw new ArgumentNullException(nameof(identityUserProvider));
+            _cache = cache ?? throw new ArgumentNullException(nameof(cache));
+            _jwtProvider = jwtProvider ?? throw new ArgumentNullException(nameof(jwtProvider));
         }
         public async Task<RenewTokenDto> Handle(RenewTokenCommand request, CancellationToken cancellation)
         {
@@ -32,31 +34,23 @@ namespace TestAuth.Domain.Handlers.Tokens
                 throw new Exception($"The user has not been found with e-mail {request.Email}");
             }
 
-            // TODO: Add token cache check
-            // TODO: Validate if refresh token expired
-
-            var claims = new List<Claim> {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email!),
-                new Claim(JwtRegisteredClaimNames.Name, user.UserName!),
-            };
-
-            var userRoles = await _unitOfWork.UserManager.GetRolesAsync(user);
-
-            foreach (var role in userRoles)
+            var tokenDtoFromCache = await _cache.GetAsync<RenewTokenDto>(user.Email!);
+            if (!_jwtProvider.ValidateRefreshToken(tokenDtoFromCache?.RefreshToken))
             {
-                claims.Add(new Claim(ClaimTypes.Role, role));
+                return tokenDtoFromCache!;
             }
 
-            var renewTokenDto = new RenewTokenDto
+            var claims = await _identityUserProvider.GetClaimsAsync(user);
+
+            var tokenDto = new RenewTokenDto
             {
-                AccessToken = _jwtGenerator.CreateAccessToken(claims),
-                RefreshToken = _jwtGenerator.CreateRefreshToken()
+                AccessToken = _jwtProvider.CreateAccessToken(claims),
+                RefreshToken = _jwtProvider.CreateRefreshToken()
             };
 
-            // TODO: Store token to cache
+            await _cache.SetAsync(user.Email!, tokenDto);
 
-            return renewTokenDto;
+            return tokenDto;
         }
     }
 }

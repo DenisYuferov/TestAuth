@@ -1,9 +1,4 @@
-﻿using System.Security.Claims;
-
-using MediatR;
-
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.JsonWebTokens;
+﻿using MediatR;
 
 using SharedCore.Domain.Abstraction.Providers;
 
@@ -16,17 +11,20 @@ namespace TestAuth.Domain.Handlers.Tokens
     public class ObtainTokenCommandHandler : IRequestHandler<ObtainTokenCommand, ObtainTokenDto>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IJwtProvider _jwtGenerator;
-        private readonly ILogger _logger;
+        private readonly IIdentityUserProvider _identityUserProvider;
+        private readonly IJwtProvider _jwtProvider;
+        private readonly IRedisCacheProvider _cache;
 
         public ObtainTokenCommandHandler(
             IUnitOfWork unitOfWork,
-            IJwtProvider jwtGenerator,
-            ILogger<ObtainTokenCommandHandler> logger)
+            IIdentityUserProvider identityUserProvider,
+            IJwtProvider jwtProvider,
+            IRedisCacheProvider cache)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _jwtGenerator = jwtGenerator ?? throw new ArgumentNullException(nameof(jwtGenerator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _identityUserProvider = identityUserProvider ?? throw new ArgumentNullException(nameof(identityUserProvider));
+            _jwtProvider = jwtProvider ?? throw new ArgumentNullException(nameof(jwtProvider));
+            _cache = cache ?? throw new ArgumentNullException(nameof(cache));
         }
         public async Task<ObtainTokenDto> Handle(ObtainTokenCommand request, CancellationToken cancellation)
         {
@@ -42,30 +40,23 @@ namespace TestAuth.Domain.Handlers.Tokens
                 throw new Exception($"The password in not correct for user with e-mail {request.Email}");
             }
 
-            // TODO: Add token cache check
-
-            var claims = new List<Claim> {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email!),
-                new Claim(JwtRegisteredClaimNames.Name, user.UserName!),
-            };
-
-            var userRoles = await _unitOfWork.UserManager.GetRolesAsync(user);
-
-            foreach (var role in userRoles)
+            var tokenDtoFromCache = await _cache.GetAsync<ObtainTokenDto>(user.Email!);
+            if (_jwtProvider.ValidateAccessToken(tokenDtoFromCache?.AccessToken))
             {
-                claims.Add(new Claim(ClaimTypes.Role, role));
+                return tokenDtoFromCache!;
             }
 
-            var obtainTokenDto = new ObtainTokenDto
+            var claims = await _identityUserProvider.GetClaimsAsync(user);
+
+            var tokenDto = new ObtainTokenDto
             {
-                AccessToken = _jwtGenerator.CreateAccessToken(claims),
-                RefreshToken = _jwtGenerator.CreateRefreshToken()
+                AccessToken = _jwtProvider.CreateAccessToken(claims),
+                RefreshToken = _jwtProvider.CreateRefreshToken()
             };
 
-            // TODO: Store token to cache
+            await _cache.SetAsync(user.Email, tokenDto);
 
-            return obtainTokenDto;
+            return tokenDto;
         }
     }
 }

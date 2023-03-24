@@ -8,7 +8,7 @@ namespace TestAuth.Infrastructure.PostgreDb.Seeds
 {
     public static class Seed
     {
-        public static void AddData(IUnitOfWork? unitOfWork, DatabaseOptions? options)
+        public static void AddData(IUnitOfWork? unitOfWork, PostgreDbOptions? options)
         {
             foreach (var seedUser in options?.SeedUsers!)
             {

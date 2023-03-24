@@ -20,11 +20,11 @@ namespace TestAuth.Infrastructure.PostgreDb
 
         private static void AddDatabaseInfrastructure(IServiceCollection services, IConfiguration configuration)
         {
-            var databaseSection = configuration.GetSection(DatabaseOptions.Database);
-            services.Configure<DatabaseOptions>(databaseSection);
+            var section = configuration.GetSection(PostgreDbOptions.PostrgreDb);
+            services.Configure<PostgreDbOptions>(section);
 
-            var databaseOptions = databaseSection.Get<DatabaseOptions>();
-            services.AddDbContext<AuthDbContext>(opt => opt.UseNpgsql(databaseOptions?.Connection));
+            var options = section.Get<PostgreDbOptions>();
+            services.AddDbContext<AuthDbContext>(opt => opt.UseNpgsql(options?.Connection));
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

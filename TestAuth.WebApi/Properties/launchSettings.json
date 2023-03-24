@@ -34,16 +34,18 @@
         "Jwt__AccessTokenExpires": "00:30:00",
         "Jwt__RefreshTokenExpires": "08:00:00",
         //
-        "Database__Connection": "Host=localhost;Port=5432;Database=TestAuth;Username=postgres;Password=postgres",
-        "Database__SeedUsers__0__Name": "IvanovIvan",
-        "Database__SeedUsers__0__Email": "ivanov.ivan@test.domain",
-        "Database__SeedUsers__0__Password": "Admin_1234",
-        "Database__SeedUsers__0__Roles__0": "admin",
-        "Database__SeedUsers__0__Roles__1": "user",
-        "Database__SeedUsers__1__Name": "PetrovPetr",
-        "Database__SeedUsers__1__Email": "petrov.petr@test.domain",
-        "Database__SeedUsers__1__Password": "User_1234",
-        "Database__SeedUsers__1__Roles__0": "user"
+        "PostrgreDb__Connection": "Host=localhost;Port=5432;Database=TestAuth;Username=postgres;Password=postgres",
+        "PostrgreDb__SeedUsers__0__Name": "IvanovIvan",
+        "PostrgreDb__SeedUsers__0__Email": "ivanov.ivan@test.domain",
+        "PostrgreDb__SeedUsers__0__Password": "Admin_1234",
+        "PostrgreDb__SeedUsers__0__Roles__0": "admin",
+        "PostrgreDb__SeedUsers__0__Roles__1": "user",
+        "PostrgreDb__SeedUsers__1__Name": "PetrovPetr",
+        "PostrgreDb__SeedUsers__1__Email": "petrov.petr@test.domain",
+        "PostrgreDb__SeedUsers__1__Password": "User_1234",
+        "PostrgreDb__SeedUsers__1__Roles__0": "user",
+        //
+        "RedisCacheOptions__Configuration": "localhost:6379,password=redis1234"
       }
     },
     "IIS Express": {

@@ -2,9 +2,9 @@
 
 namespace TestAuth.Domain.Model.PostgreDb.Options
 {
-    public class DatabaseOptions
+    public class PostgreDbOptions
     {
-        public const string Database = "Database";
+        public const string PostrgreDb = "PostrgreDb";
 
         public string? Connection { get; set; }
 
