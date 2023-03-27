@@ -12,7 +12,7 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.4" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.4" />
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="6.27.0" />
-    <PackageReference Include="SharedCore.Model" Version="1.0.10" />
+    <PackageReference Include="SharedCore.Model" Version="1.0.13" />
   </ItemGroup>
 
 </Project>

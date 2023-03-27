@@ -1,6 +1,7 @@
 ﻿using MediatR;
 
 using SharedCore.Domain.Abstraction.Providers;
+using SharedCore.Model.Exceptions;
 
 using TestAuth.Domain.Abstraction.UnitOfWorks;
 using TestAuth.Domain.Model.CQRS.Commands.Tokens;
@@ -31,13 +32,13 @@ namespace TestAuth.Domain.Handlers.Tokens
             var user = await _unitOfWork.UserManager.FindByEmailAsync(request.Email!);
             if (user == null)
             {
-                throw new Exception($"The user has not been found with e-mail {request.Email}");
+                throw new NotFoundAppException($"The user has not been found with e-mail {request.Email}");
             }
 
             var pwdCheck = await _unitOfWork.SignInManager.CheckPasswordSignInAsync(user, request.Password, false);
             if (!pwdCheck.Succeeded)
             {
-                throw new Exception($"The password in not correct for user with e-mail {request.Email}");
+                throw new UnauthorizedAppException($"The password in not correct for user with e-mail {request.Email}");
             }
 
             var tokenDtoFromCache = await _cache.GetAsync<ObtainTokenDto>(user.Email!);

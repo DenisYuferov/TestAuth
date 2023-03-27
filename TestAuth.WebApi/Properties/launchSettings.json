@@ -45,7 +45,12 @@
         "PostrgreDb__SeedUsers__1__Password": "User_1234",
         "PostrgreDb__SeedUsers__1__Roles__0": "user",
         //
-        "RedisCacheOptions__Configuration": "localhost:6379,password=redis1234"
+        "RedisCacheOptions__Configuration": "localhost:6379,password=redis1234",
+        //
+        "MassTransit__Host": "localhost",
+        "MassTransit__VirtualHost": "/",
+        "MassTransit__Username": "rabbitmq",
+        "MassTransit__Password": "rabbitmq1234"
       }
     },
     "IIS Express": {
