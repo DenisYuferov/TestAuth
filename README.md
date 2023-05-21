@@ -10,4 +10,7 @@
 - MessageQueues:
   - RabbitMQ (With MassTransit)
 - Logging:
-  - JsonLogger</pre>
+  - JsonLogger
+- Deployment:
+  - Dockerfile
+</pre>

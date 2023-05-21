@@ -13,11 +13,10 @@
   <ItemGroup>
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.14" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.4" />
-    <PackageReference Include="SharedCore.Infrastructure" Version="1.0.13" />
+    <PackageReference Include="SharedCore.Infrastructure" Version="1.0.20" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TestAuth.Domain.Abstraction\TestAuth.Domain.Abstraction.csproj" />
     <ProjectReference Include="..\TestAuth.Infrastructure.PostgreDb\TestAuth.Infrastructure.PostgreDb.csproj" />
   </ItemGroup>
 
